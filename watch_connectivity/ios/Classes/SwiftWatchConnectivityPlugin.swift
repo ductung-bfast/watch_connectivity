@@ -67,6 +67,16 @@ public class SwiftWatchConnectivityPlugin: NSObject, FlutterPlugin, WCSessionDel
     
     public func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         channel.invokeMethod("didReceiveMessage", arguments: message)
+//         print("TungVD message received")
+        let application = UIApplication.shared
+        var identifier: UIBackgroundTaskIdentifier = .invalid
+        let endBlock = {
+            if identifier != .invalid {
+                application.endBackgroundTask(identifier)
+            }
+            identifier = .invalid
+        }
+        identifier = application.beginBackgroundTask(withName: "com.hatchi.cigArrete.watchAndWidgetBackgroundSyncTaskId", expirationHandler: endBlock)
     }
     
     public func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
